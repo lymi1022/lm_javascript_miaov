@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    .email-list-item {
+        line-height: 20px;
+        background-color: #a6c4ef;
+        list-style: none;
+    }
+
+    .email-check-all {
+        padding-left: 40px;
+    }
+</style>
+
+<body>
+    <h1>列表</h1>
+    <div class="email-check-all"><input type="checkbox" id="checkAll" /><label for="checkAll">全选</label></div>
+    <div class="email-list">
+    </div>
+</body>
+
+</html>
+<script src="data.js"></script>
+<script>
+    var emailList = emailData.map(function (item) {
+        return `<ul class="email-list-item">
+                    <li class="email-check-item"><input  type="checkbox"/></li>
+                    <li>名字：${item.name}</li>
+                    <li>时间：${item.time}</li>
+                    <li>内容：${item.content}</li>
+                    <li>签名：${item.signature}</li>
+                </ul>`
+    }).join(" ")
+    let htmlEmailDom = document.querySelector('.email-list');
+    htmlEmailDom.innerHTML = emailList;
+    var $checkAll = document.querySelector('#checkAll');
+    var $checkSingle = document.querySelectorAll('.email-check-item input')
+    var checkAllLen = $checkSingle.length
+    // 全选
+    $checkAll.onclick = function () {
+        for (var i = 0; i < checkAllLen; i++) {
+            // 当前全选按钮是否被选中
+            $checkSingle[i].checked = this.checked;
+            // 给全选后的数据添加背景色
+            if($checkSingle[i].checked){
+                this.parentNode.style.background = '#1f6dda'
+                $checkSingle[i].parentNode.parentNode.style.background = '#1f6dda'
+            } else {
+                this.parentNode.style.background = ''
+                $checkSingle[i].parentNode.parentNode.style.background = ''
+            }
+        }
+    }
+    // 单选
+    for(var j=0;j<checkAllLen;j++){
+        $checkSingle[j].onclick = function(){
+            if(!this.checked){
+                $checkAll.checked = false
+                this.parentNode.parentNode.style.background = ''
+            } else {
+                var n = 0;
+                for(var k=0;k<checkAllLen;k++){
+                    if($checkSingle[k].checked){
+                        n++;
+                        this.parentNode.parentNode.style.background = '#1f6dda'
+                    } 
+                }
+                if(n==checkAllLen){
+                    $checkAll.checked = true
+                }
+            }
+        }
+    }
+</script>
